@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TP_CRM.Models;
 
@@ -20,17 +22,18 @@ public partial class Order
     public string? Comment { get; set; }
 
 
-
     public int IdClient { get; set; }
 
-    public virtual Client Client { get; set; } = null!;
+    
+    [System.Text.Json.Serialization.JsonIgnore]
+    public virtual Client Client { get; set; }
 
     public Order()
     {
 
     }
 
-    public Order(string typePresta, decimal nbJours, decimal tjmHt, decimal tva, string state, string comment, Client client)
+    public Order(string typePresta, decimal nbJours, decimal tjmHt, decimal tva, string state, string comment, int idClient)
     {
         this.TypePresta = typePresta;
         this.NbJours = nbJours;
@@ -38,7 +41,7 @@ public partial class Order
         this.Tva = tva;
         this.State = state;
         this.Comment = comment;
-        this.Client = client;
-        this.IdClient = client.Id;
+        this.IdClient = idClient;
+        // Client.Orders.Add(this);
     }
 }

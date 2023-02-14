@@ -2,64 +2,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TP_CRM.Models;
 
-namespace TP1.Controllers;
+namespace TP_CRM.Controllers;
 
-[ApiController]
 [Route("users")]
+[ApiController]
 public class UserController : ControllerBase
 {
     public static CrmContext context = new ();
-    public static List<User> Users = context.Users.ToList();
 
     public UserController()
     {
 
     }
 
-    // [HttpGet]
-    // public List<User> Get()
-    // {
-    //     return Users;
-    // }
+    [HttpGet]
+    public List<User> Get()
+    {
+        return context.Users.ToList();
+    }
 
     [HttpGet]
     [Route("{id}")]
-    public IActionResult Get(int id)
+    public User Get(int id)
     {
-        var userTempo = Users[id - 1];
-
-        if (userTempo != null)
-        {
-            return Ok(userTempo);
-        }
-        else
-        {
-            return NotFound($"L'utilisateur avec l'id {id} est introuvable.");
-        }
+        return context.Users.Find(id);
+        
     }
 
     [HttpPost]
-    [Route("Add")]
-    public List<User> Post([FromBody] User user)
+    [Route("add")]
+    public void Post(User user)
     {
         context.Users.Add(user);
         context.SaveChanges();
-        return context.Users.ToList();
     }
 
     [HttpPut]
     [Route("edit/{id}")]
-    public string Put([FromBody] User user)
+    public string Put(int id, [FromBody] User user)
     {
         try
         {
-            User tempo = context.Users.Find(user.Id);
-            tempo.Email = user.Email;
-            tempo.Password = user.Password;
-            tempo.Firstname = user.Firstname;
-            tempo.Lastname = user.Lastname;
-            tempo.ConfirmedPassword = user.ConfirmedPassword;
-            tempo.Grants = user.Grants;
+            User userToUpdate = context.Users.Find(id);
+            userToUpdate.Email = user.Email;
+            userToUpdate.Password = user.Password;
+            userToUpdate.Firstname = user.Firstname;
+            userToUpdate.Lastname = user.Lastname;
+            userToUpdate.ConfirmedPassword = user.ConfirmedPassword;
+            userToUpdate.Grants = user.Grants;
             context.SaveChanges();
             return "L'utilisateur a bien été modifié.";
         }
@@ -70,20 +60,20 @@ public class UserController : ControllerBase
 
     }
 
-    // [HttpDelete]
-    // [Route("{id}")]
-    // public string Delete (int id)
-    // {
-    //     try
-    //     {
-    //         User tempo = context.Users.Find(id);
-    //         context.Users.Remove(tempo);
-    //         context.SaveChanges();
-    //         return "L'utilisateur a bien été supprimé de la liste.";
-    //     }
-    //     catch
-    //     {
-    //         return "Identifiant introuvable, suppression impossible.";
-    //     }
-    // }   
+    [HttpDelete]
+    [Route("{id}")]
+    public string Delete (int id)
+    {
+        try
+        {
+            var userToRemove = context.Users.Find(id);
+            context.Users.Remove(userToRemove);
+            context.SaveChanges();
+            return "L'utilisateur a bien été supprimé de la liste.";
+        }
+        catch
+        {
+            return "Identifiant introuvable, suppression impossible.";
+        }
+    }   
 }

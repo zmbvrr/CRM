@@ -7,20 +7,21 @@ namespace TP_CRM.Models;
 
 public partial class CrmContext : DbContext
 {
+    public DbSet<Client> Clients { get; set; }
+
+    public DbSet<Order> Orders { get; set; }
+
+    public DbSet<User> Users { get; set; }
+
     public CrmContext()
     {
         // Database.EnsureDeleted();
         Database.EnsureCreated();
-        // Client AirFrance = new Client("Air France-KLM", true, 20, 500000, "Compagnie aérienne française");
-        // HomeController.context.Clients.Add(AirFrance);
-        // Client Renault = new Client("Renault", true, 10, 150000, "Fabricant de voitures et de véhicules utilitaires");
-        // HomeController.context.Clients.Add(Renault);
-        // Client Carrefour = new Client("Carrefour", true, 20, 250000, "Chaine de supermarchés et d'hypermarchés");
-        // HomeController.context.Clients.Add(Carrefour);
-        // Client Total = new Client("TotalEnergies", false, 20, 1000000, "Compagnie pétrolière et gazière française");
-        // HomeController.context.Clients.Add(Total);
-        // Client SocieteGenerale = new Client("Société générale", true, 20, 300000, "Banque et institution financière française");
-        // HomeController.context.Clients.Add(SocieteGenerale);
+        // Clients.Add(new Client("Air France-KLM", true, 20, 500000, "Compagnie aérienne française"));
+        // Clients.Add(new Client("Renault", true, 10, 150000, "Fabricant de voitures et de véhicules utilitaires"));
+        // Clients.Add(new Client("Carrefour", true, 20, 250000, "Chaine de supermarchés et d'hypermarchés"));
+        // Clients.Add(new Client("TotalEnergies", false, 20, 1000000, "Compagnie pétrolière et gazière française"));
+        // Clients.Add(new Client("Société générale", true, 20, 300000, "Banque et institution financière française"));
 
         
         // Order order1 = new Order("Développement web", 10, 1200, 20, "CONFIRMED", "Création d'un site de commerce électronique", Carrefour);
@@ -35,27 +36,16 @@ public partial class CrmContext : DbContext
         // HomeController.context.Orders.Add(order5);
 
 
-        // User John = new User("john@example.com", "abc123", "John", "Smith", "abc123", "ADMIN");
-        // HomeController.context.Users.Add(John);
-        // User Sarah = new User("sarah@example.com", "def456", "Sarah", "Johnson", "def456", "USER");
-        // HomeController.context.Users.Add(Sarah);
-        // User Mark = new User("mark@example.com", "123abc", "Mark", "Davis", "123abc", "USER");
-        // HomeController.context.Users.Add(Mark);
+        // Users.Add(new User("john@example.com", "abc123", "John", "Smith", "abc123", "ADMIN"));
+        // Users.Add(new User("sarah@example.com", "def456", "Sarah", "Johnson", "def456", "USER"));
+        // Users.Add(new User("mark@example.com", "123abc", "Mark", "Davis", "123abc", "USER"));
         
         // SaveChanges();
 
     }
 
-    public CrmContext(DbContextOptions<CrmContext> options)
-        : base(options)
-    {
-    }
 
-    public virtual DbSet<Client> Clients { get; set; }
 
-    public virtual DbSet<Order> Orders { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     => optionsBuilder.UseSqlServer("Server=LAPTOP-HM1OHB3G;Database=CRM;Trusted_Connection=True;trustServerCertificate=true;");
