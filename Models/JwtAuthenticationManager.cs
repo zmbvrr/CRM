@@ -13,17 +13,22 @@ namespace TP_CRM
 {
     public class JwtAuthenticationManager
     {
+        public static CrmContext context = new();
         private readonly string key;
-        private readonly Dictionary<string, string> users = new(){{"test", "password"}};
+        private Dictionary<string, string> users = new();
 
         public JwtAuthenticationManager(string key)
         {
             this.key = key;
+            foreach(User u in context.Users)
+            {
+                users.Add(u.Email, u.Password);               
+            }
         }
 
-        public string Authenticate(string username, string password)
+        public string Authenticate(string email, string password)
         {
-            if(!users.Any(u => u.Key == username && u.Value == password))
+            if(!users.Any(u => u.Key == email && u.Value == password))
             {
                 return null;
             }
@@ -35,7 +40,7 @@ namespace TP_CRM
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, email)
                 }),
 
                 Expires = DateTime.UtcNow.AddHours(1),

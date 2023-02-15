@@ -19,18 +19,6 @@ public class ClientController : ControllerBase
         this.jwtAuthenticationManager = jwtAuthenticationManager;
     }
 
-    [AllowAnonymous]
-    [HttpPost("Authorize")]
-    public string AuthenticateUser([FromBody] User user)
-    {
-        var token = jwtAuthenticationManager.Authenticate(user.Firstname, user.Password);
-        if (token == null)
-        {
-            return "Non autorisé";
-        }
-        return token;
-    }
-
     [Authorize]
 	[HttpGet]
 	public List<Client> GetClients()
