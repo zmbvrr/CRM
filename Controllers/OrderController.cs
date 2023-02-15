@@ -1,39 +1,60 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TP_CRM.Models;
+using TP_CRM;
 
 namespace TP_CRM.Controllers;
 
-[Route("orders")]
 [ApiController]
+[Route("orders")]
 public class OrderController : ControllerBase
 {
 	private static CrmContext context = new();
 
-	public OrderController()
+    public readonly JwtAuthenticationManager jwtAuthenticationManager;
+
+    public OrderController(JwtAuthenticationManager jwtAuthenticationManager)
+    {
+        this.jwtAuthenticationManager = jwtAuthenticationManager;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("Authorize")]
+    public string AuthenticateUser([FromBody] User user)
+    {
+        var token = jwtAuthenticationManager.Authenticate(user.Firstname, user.Password);
+        if (token == null)
+        {
+            return "Non autorisé";
+        }
+        return token;
+    }
+
+	[Authorize]
+    [HttpGet]
+	public List<Order> GetOrders()
 	{
+		// return context.Orders.Where(o => o.IdClient == idClient).Select(o => o.Client.Name).ToList();
+        return context.Orders.ToList();
 	}
 
-	[HttpGet]
-	public List<string> GetOrders(int idClient)
-	{
-		return context.Orders.Where(o => o.IdClient == idClient).Select(o => o.Client.Name).ToList();
-	}
-
-	[HttpGet]
+	[Authorize]
+    [HttpGet]
     [Route("{id}")]
 	public Order Get(int id)
 	{
 		return context.Orders.Find(id);
 	}
 
+    [Authorize]
 	[HttpPost]
     [Route("add")]
-	public void Post([FromBody] Order order)
-	{
+	public void Post(Order order)
+	{     
         context.Orders.Add(order);
 		context.SaveChanges();
 	}
 
+    [Authorize]
 	[HttpPut]
     [Route("edit/{id}")]
 	public string Put(int id, [FromBody]Order order)
@@ -57,13 +78,14 @@ public class OrderController : ControllerBase
         }
 	}
 
+    [Authorize]
 	[HttpDelete]
     [Route("{id}")]
 	public string Delete (int id)
     {
         try
         {
-            var orderToRemove = context.Orders.Find(id);
+            Order orderToRemove = context.Orders.Find(id);
             context.Orders.Remove(orderToRemove);
             context.SaveChanges();
             return "La commande a bien été supprimée de la liste.";

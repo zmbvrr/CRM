@@ -1,15 +1,14 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TP_CRM.Models;
+using TP_CRM;
 
 namespace TP_CRM.Controllers;
 
 public class HomeController : Controller
 {
-    public static CrmContext context = new CrmContext();
     public HomeController()
     {
-        
+        CrmContext context = new CrmContext();
     }
 
     public IActionResult Index()

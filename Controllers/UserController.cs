@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TP_CRM.Models;
+using TP_CRM;
 
 namespace TP_CRM.Controllers;
 
@@ -10,17 +11,34 @@ public class UserController : ControllerBase
 {
     public static CrmContext context = new ();
 
-    public UserController()
-    {
+    public readonly JwtAuthenticationManager jwtAuthenticationManager;
 
+    public UserController(JwtAuthenticationManager jwtAuthenticationManager)
+    {
+        this.jwtAuthenticationManager = jwtAuthenticationManager;
     }
 
+    [AllowAnonymous]
+    [HttpPost("Authorize")]
+    public string AuthenticateUser([FromBody] User user)
+    {
+        var token = jwtAuthenticationManager.Authenticate(user.Firstname, user.Password);
+        if (token == null)
+        {
+            return "Non autorisé";
+        }
+        return token;
+    }
+
+    
+    [Authorize]
     [HttpGet]
-    public List<User> Get()
+    public List<User> GetUsers()
     {
         return context.Users.ToList();
     }
 
+    [Authorize]
     [HttpGet]
     [Route("{id}")]
     public User Get(int id)
@@ -29,6 +47,7 @@ public class UserController : ControllerBase
         
     }
 
+    [Authorize]
     [HttpPost]
     [Route("add")]
     public void Post(User user)
@@ -37,6 +56,7 @@ public class UserController : ControllerBase
         context.SaveChanges();
     }
 
+    [Authorize]
     [HttpPut]
     [Route("edit/{id}")]
     public string Put(int id, [FromBody] User user)
@@ -60,6 +80,7 @@ public class UserController : ControllerBase
 
     }
 
+    [Authorize]
     [HttpDelete]
     [Route("{id}")]
     public string Delete (int id)

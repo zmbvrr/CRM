@@ -79,3 +79,4 @@ C:\Users\antho\Desktop\Cours_M2i\TP CRM\bin\Debug\net7.0\Swashbuckle.AspNetCore.
 C:\Users\antho\Desktop\Cours_M2i\TP CRM\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\antho\Desktop\Cours_M2i\TP CRM\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\antho\Desktop\Cours_M2i\TP CRM\obj\Debug\net7.0\TP CRM.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\antho\Desktop\Cours_M2i\TP CRM\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

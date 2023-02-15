@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TP_CRM.Models;
+namespace TP_CRM;
 
 public partial class User
 {
     public int Id { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; } = null!;
 
     public string Password { get; set; } = null!;
 
     public string Firstname { get; set; } = null!;
 
-    public string Lastname { get; set; } = null!;
+    public string? Lastname { get; set; } = null!;
 
-    public string ConfirmedPassword { get; set; } = null!;
+    public string? ConfirmedPassword { get; set; } = null!;
 
     public string? Grants { get; set; }
 

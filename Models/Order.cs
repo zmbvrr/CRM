@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TP_CRM.Models;
+namespace TP_CRM;
 
 public partial class Order
 {
@@ -26,7 +26,7 @@ public partial class Order
 
     
     [System.Text.Json.Serialization.JsonIgnore]
-    public virtual Client Client { get; set; }
+    public virtual Client? Client { get; set; }
 
     public Order()
     {
@@ -42,6 +42,7 @@ public partial class Order
         this.State = state;
         this.Comment = comment;
         this.IdClient = idClient;
-        // Client.Orders.Add(this);
+        // this.Client = client;
+        Client.Orders.Add(this);
     }
 }

@@ -1,24 +1,44 @@
+using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TP_CRM.Models;
+using TP_CRM;
 
 namespace TP_CRM.Controllers;
 
-[Route("clients")]
 [ApiController]
+[Route("clients")]
+
 public class ClientController : ControllerBase
 {
 	private static CrmContext context = new();
 
-	public ClientController()
-	{
-	}
+    public readonly JwtAuthenticationManager jwtAuthenticationManager;
 
+    public ClientController(JwtAuthenticationManager jwtAuthenticationManager)
+    {
+        this.jwtAuthenticationManager = jwtAuthenticationManager;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("Authorize")]
+    public string AuthenticateUser([FromBody] User user)
+    {
+        var token = jwtAuthenticationManager.Authenticate(user.Firstname, user.Password);
+        if (token == null)
+        {
+            return "Non autorisé";
+        }
+        return token;
+    }
+
+    [Authorize]
 	[HttpGet]
-	public List<string> GetClients()
+	public List<Client> GetClients()
 	{
-		return context.Clients.Select(c => c.Name).ToList();
+		return context.Clients.ToList();
 	}
 
+    [Authorize]
 	[HttpGet]
     [Route("{id}")]
 	public Client Get(int id)
@@ -26,6 +46,7 @@ public class ClientController : ControllerBase
 		return context.Clients.Find(id);
 	}
 
+    [Authorize]
 	[HttpPost]
     [Route("add")]
 	public void Post(Client client)
@@ -34,6 +55,7 @@ public class ClientController : ControllerBase
 		context.SaveChanges();
 	}
 
+    [Authorize]
 	[HttpPut]
     [Route("edit/{id}")]
 	public string Put(int id, [FromBody]Client client)
@@ -55,6 +77,7 @@ public class ClientController : ControllerBase
         }
 	}
 
+    [Authorize]
 	[HttpDelete]
     [Route("{id}")]
 	public string Delete (int id)
@@ -68,7 +91,7 @@ public class ClientController : ControllerBase
         }
         catch
         {
-            return "Identifiant introuvable, suppression impossible.";
+            return "Suppression impossible.";
         }
     }  
 }

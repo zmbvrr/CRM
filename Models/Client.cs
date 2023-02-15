@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TP_CRM.Models;
+namespace TP_CRM;
 
 public partial class Client
 {
@@ -17,11 +17,10 @@ public partial class Client
 
     public string? Comment { get; set; }
 
-    public virtual List<Order> Orders { get; }
+    public virtual List<Order>? Orders { get; } = new();
 
     public Client()
     {
-        // Orders = new List<Order>();
     }
 
     public Client(string name, bool state, decimal tva, decimal totalCaHt, string comment)
@@ -31,6 +30,5 @@ public partial class Client
         this.Tva = tva;
         this.TotalCaHt = totalCaHt;
         this.Comment = comment;
-        // Orders = new List<Order>();
     }
 }

@@ -1,4 +1,4 @@
-namespace TP_CRM.Models;
+namespace TP_CRM;
 
 public class ErrorViewModel
 {
